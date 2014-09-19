@@ -257,16 +257,17 @@ class JSON_API_MU_Controller {
             header("HTTP/1.1 404 Not found");
             header("Content-Type: application/json; charset=$charset", true);
             flush(); 
-            $json_api->error("Blog not found", 400); 
-        }      
+            $json_api->error("Blog not found", 404); 
+        }    
         //Associates a user to a blog with 'Autor' role
         $enroll = add_user_to_blog($parameters['blog_id'],$parameters['id'],'author');
+
         //Checks if the user exists
-        if('' != $enroll->get_error_code()){
+        if(!$enroll){
             header("HTTP/1.1 400 Bad params");
             header("Content-Type: application/json; charset=$charset", true);
             flush(); 
-            $json_api->error($enroll->get_error_code(), 400);  
+            die; 
         }                 
          
         return array();
